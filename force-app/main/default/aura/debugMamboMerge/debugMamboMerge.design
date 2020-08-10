@@ -1,0 +1,13 @@
+<design:component>
+  <design:attribute
+    name="templateId"
+    label="Template Id"
+    description="The Salesforce Id of the File"
+  />
+  <design:attribute
+    name="debug"
+    label="Console Logs"
+    description="Show Console Logs"
+    default="false"
+  />
+</design:component>

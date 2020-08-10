@@ -1,0 +1,18 @@
+<aura:component
+  access="global"
+  implements="force:hasRecordId,force:hasSObjectName,flexipage:availableForAllPageTypes"
+>
+  <aura:attribute name="debug" type="Boolean" default="false" />
+  <aura:attribute name="mergeOnLoad" type="Boolean" default="false" />
+  <aura:attribute name="recordId" type="String" />
+  <aura:attribute name="sObjectName" type="String" />
+  <aura:attribute name="templateId" type="String" />
+
+  <mambo:mamboMerge
+    debug="{!v.debug}"
+    recordId="{!v.recordId}"
+    objectApiName="{!v.sObjectName}"
+    templateId="{!v.templateId}"
+    mergeOnLoad="{!v.mergeOnLoad}"
+  />
+</aura:component>
