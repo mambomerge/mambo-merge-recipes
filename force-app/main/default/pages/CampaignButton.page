@@ -1,0 +1,94 @@
+<apex:page standardController="Campaign" applyBodyTag="false" extensions="CampaignExtension">
+  <!--
+      @description Use this page for a Button on the Campaign sObject
+                    that will merge a document for each CampaignMember record related to it
+    -->
+  <apex:pageMessages />
+  <apex:form>
+    <apex:pageBlock>
+      <apex:pageBlockButtons location="top">
+        <apex:commandButton action="{!cancel}" value="Back" />
+      </apex:pageBlockButtons>
+    </apex:pageBlock>
+  </apex:form>
+  <apex:includeLightning />
+  <apex:slds />
+  <div class="slds-scope" style="margin-bottom: 50px;">
+    <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" role="progressbar" style="width:100%;">
+      <span id="myBar" class="slds-progress-bar__value" style="width:0%">
+        <span id="assistiveText" class="slds-assistive-text">Progress: 0%</span>
+      </span>
+    </div>
+  </div>
+
+
+  <div id="lightning" style="display:none;" />
+
+  <script type="text/javascript">
+    // TODO (REQUIRED): Please enter your template Id in the var below
+    const templateId = "";
+
+    // TODO (OPTIONAL): Enable debug mode if things are working
+    const debugOn = false;
+
+    /*****  DO NOT CHANGE BELOW CODE *****/
+    const campaignId = '{!Campaign.Id}';
+    console.log( 'This CampaignId:', campaignId );
+
+    Visualforce.remoting.timeout = 120000; // Set timeout at page level
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.CampaignExtension.queryCampaignMembers}',
+          campaignId, 
+          mergeDocuments
+      );
+    let counter;
+    let recordIds;
+
+    function incrementMe() {
+        counter++;
+        var v = parseInt(100 * counter / recordIds.length);
+        var elem = document.getElementById('myBar');
+        elem.style.width = v + "%";
+
+        var asst = document.getElementById("assistiveText");
+        elem.innerText = 'Progress: ' + v + '%'
+      }
+
+    function mergeDocuments(result, event){
+      counter = 0;
+      recordIds = [];
+      for ( let i=0; i<result.length; i++ ){
+        recordIds.push(result[i].Id );
+      }
+      if (recordIds.length > 0 && templateId) {
+        var c = 1;
+        $Lightning.use("c:mamboMergeApp", function () {
+          for (let i = 0; i < recordIds.length; i++) {
+            $Lightning.createComponent(
+              "c:mamboMergeAura",
+              {
+                templateId: templateId,
+                debug: debugOn,
+                recordId: recordIds[i].trim(),
+                mergeOnLoad: true,
+              },
+              "lightning",
+              function (cmp, status, errorMessage) {
+                if (status === 'SUCCESS') {
+                  setTimeout(
+                    function () {
+                      incrementMe();
+                      console.log("isSuccess", cmp.get('v.isSuccess'))
+                    },
+                    (c * 5000)
+                  );
+                }
+                c++;
+              }
+            );
+          }
+        });
+      }
+    }
+  </script>
+</apex:page>

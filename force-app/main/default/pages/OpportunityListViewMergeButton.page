@@ -1,35 +1,33 @@
-<apex:page
-  standardController="Opportunity"
-  recordSetVar="records"
-  applyBodyTag="false"
->
+<apex:page standardController="Opportunity" recordSetVar="records" applyBodyTag="false">
   <!--
     @description Use this page for a List View Button on the Opportunity Tab
                   that will merge a document for each record in the list view
   -->
+  <apex:form>
+    <apex:pageBlock>
+      <apex:pageBlockButtons location="top">
+        <apex:commandButton action="{!cancel}" value="Back" />
+      </apex:pageBlockButtons>
+    </apex:pageBlock>
+  </apex:form>
+  
   <apex:pageMessages />
   <apex:includeLightning />
   <apex:slds />
   <div class="slds-scope" style="margin-bottom: 50px;">
-    <div
-      class="slds-progress-bar"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      aria-valuenow="25"
-      role="progressbar"
-      style="width: 100%; height: 20px;"
-    >
-      <span id="myBar" class="slds-progress-bar__value" style="width: 0%;">
+    <div class="slds-progress-bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" role="progressbar" style="width:100%; height: 20px;">
+      <span id="myBar" class="slds-progress-bar__value" style="width:0%">
         <span id="assistiveText" class="slds-assistive-text">Progress: 0%</span>
       </span>
     </div>
   </div>
 
-  <div id="lightning" style="display: none;" />
+
+  <div id="lightning" style="display:none;" />
 
   <script>
     // TODO (REQUIRED): Please enter your template Id in the var below
-    const templateId = '';
+    const templateId = "";
 
     // TODO (REQUIRED): Please specify whether you are using checkboxes on your list view
     const mergeOnlyCheckedRecordsInListView = true;
@@ -37,10 +35,9 @@
     // TODO (OPTIONAL): Enable debug mode if things are working
     const debugOn = false;
 
+
     /*****  DO NOT CHANGE BELOW CODE *****/
-    const idsString = mergeOnlyCheckedRecordsInListView
-      ? '{!selected}'
-      : '{!records}';
+    const idsString = mergeOnlyCheckedRecordsInListView ? "{!selected}" : "{!records}";
     let recordIds = [];
     if (idsString) {
       recordIds = idsString.substring(1, idsString.length - 1).split(',');
@@ -48,33 +45,36 @@
     var counter = 0;
     function incrementMe() {
       counter++;
-      var v = parseInt((100 * counter) / recordIds.length);
+      var v = parseInt(100 * counter / recordIds.length);
       var elem = document.getElementById('myBar');
-      elem.style.width = v + '%';
+      elem.style.width = v + "%";
 
-      var asst = document.getElementById('assistiveText');
-      elem.innerText = 'Progress: ' + v + '%';
+      var asst = document.getElementById("assistiveText");
+      elem.innerText = 'Progress: ' + v + '%'
     }
 
     if (recordIds.length > 0 && templateId) {
       var c = 1;
-      $Lightning.use('c:mamboMergeApp', function () {
+      $Lightning.use("c:mamboMergeApp", function () {
         for (let i = 0; i < recordIds.length; i++) {
           $Lightning.createComponent(
-            'c:mamboMergeAura',
+            "c:mamboMergeAura",
             {
               templateId: templateId,
               debug: debugOn,
               recordId: recordIds[i].trim(),
-              mergeOnLoad: true
+              mergeOnLoad: true,
             },
-            'lightning',
+            "lightning",
             function (cmp, status, errorMessage) {
               if (status === 'SUCCESS') {
-                setTimeout(function () {
-                  incrementMe();
-                  console.log('isSuccess', cmp.get('v.isSuccess'));
-                }, c * 5000);
+                setTimeout(
+                  function () {
+                    incrementMe();
+                    console.log("isSuccess", cmp.get('v.isSuccess'))
+                  },
+                  (c * 5000)
+                );
               }
               c++;
             }
