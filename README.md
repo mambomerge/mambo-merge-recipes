@@ -12,3 +12,22 @@ Bulk generate a Mambo Merge Document for one or more Opportunities on a List Vie
 
 - aura/mamboMergeApp
 - aura/mamboMergeAura
+
+
+
+## pages/CampaignButton
+
+Bulk generate a Mambo Merge Document for all child CampaignMembers while viewing a single Campaign record
+
+**Dependancies:**
+
+- aura/mamboMergeApp
+- aura/mamboMergeAura
+- classes/CampaignExtension
+- classes/CampaignExtensionTests
+
+**Instructions:**
+1. Update the TODO in the CampaignButton VisualforcePage to include the File Id of your Template Id
+2. Deploy Visualforce Page and dependancies to your org
+3. Create a new Button on the Campaign object that uses the Visualforce Page
+4. Update your page layouts to display the button
