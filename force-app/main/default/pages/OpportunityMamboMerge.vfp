@@ -1,0 +1,35 @@
+<apex:page standardController="Opportunity" applyBodyTag="false">
+    <apex:pageMessages />
+    <apex:includeLightning />
+    <apex:slds />
+    
+    <div id="lightning" />
+    
+    <script>
+    // TODO (REQUIRED): Please enter your template Id in the var below
+    const templateId = "autosaveopportunity";
+    
+    // TODO (OPTIONAL): Enable debug mode if things are working
+    const debugOn = false;
+    
+    const recordId = '{record.Id}';
+    
+    /*****  DO NOT CHANGE BELOW CODE *****/
+    $Lightning.use("c:mamboMergeApp", function () {
+        $Lightning.createComponent(
+            "c:mamboMergeAura",
+            {
+                templateId: templateId,
+                debug: debugOn,
+                recordId: recordId
+            },
+            "lightning",
+            function (cmp, status, errorMessage) {
+                if (status === 'SUCCESS') {
+                    console.log("isSuccess", cmp.get('v.isSuccess'));
+                }
+            }
+        );
+    });
+    </script>
+</apex:page>
